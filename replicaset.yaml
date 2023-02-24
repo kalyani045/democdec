@@ -1,0 +1,17 @@
+apiVersion: 
+kind: Replicaset
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    app: myapp
+  template:
+    metadata:
+      name: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: nginx
+          ports:
+            - containerPort: 80
