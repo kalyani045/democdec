@@ -1,8 +1,26 @@
 module "vpc" {
   source = "../vpc"
-  subnetid = ["192.167.1.0/24", "192.167.2.0/24"]
-  privatesubnet = ["192.167.3.0/24", "192.167.4.0/24", "192.167.5.0/24", "192.167.6.0/24"]
- vpccidr= "192.167.0.0/16"
-  allname = "cloudblitz"
+  subnetid = var.subnetid
+  privatesubnet = var.privatesubnet
+ vpccidr= var.vpccidr
+  allname = var.allname
 }
 
+module "sg" {
+  source    = "../sg"
+  env       = var.env
+  namespace = var.namespace
+  vpc_id    = module.vpc.vpc_id
+  ingress   = var.ingress
+  tags      = var.tags
+}
+
+module "ec2" {
+source    = "../ec2"
+  ami = var.ami
+  instancetype = var.instancetype
+  publicip= var.publicip
+  profile= var.profile
+  sg = module.sg.security_group_id
+  allname = var.allname
+}
